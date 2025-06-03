@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Update the specified resource from storage.
-     */
+    // @Method POST
+    // @Route /users/{id}
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
@@ -45,9 +44,8 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
-    /**
-     * Update the specified resource from storage.
-     */
+    // @Method POST
+    // @Route /users/{id}/update-password
     public function updatePassword(Request $request, string $id)
     {
         // Manually handle validation

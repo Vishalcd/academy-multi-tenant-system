@@ -70,7 +70,7 @@
                     {{-- Filter By Sports --}}
                     @if (Auth::user()->role === 'manager')
                     <x-filter-row lable="Sports">
-                        <x-select name="sport_id" id="sport_id" :options="$sports" />
+                        <x-select name="sport_id" id="sport_id" :options="['' => 'All Sports'] + $sports" />
                     </x-filter-row>
                     @endif
 

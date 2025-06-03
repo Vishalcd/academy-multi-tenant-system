@@ -154,7 +154,7 @@
         <div class="bg-white w-full rounded-xl border border-slate-200 overflow-hidden">
             <div class="flex items-center justify-between px-5 py-5 sm:md:px-10 flex-row gap-4">
                 <x-heading>Student Fee</x-heading>
-                @if (!$student->fees_settle)
+                @if (Auth::user()->role !== 'admin' && !$student->fees_settle)
                 <a href="#deposit-fee">
                     <x-button-primary>
                         <i class="ti ti-square-rounded-plus"></i> Deposit Fee

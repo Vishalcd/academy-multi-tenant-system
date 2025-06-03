@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class SportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /sports
     public function index(Request $request)
     {
         $search = $request->get('search');
@@ -46,9 +45,8 @@ class SportController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /sports
     public function store(Request $request)
     {
         // validate data
@@ -77,22 +75,28 @@ class SportController extends Controller
         return redirect()->route('sports.index')->with('success', 'Sport Added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // @Method GET
+    // @Route /sports/{id}
     public function show(Sport $sport)
     {
-        // Authorize view action for the current user on this sport
         Gate::authorize('view', $sport);
 
-        $coaches = Employee::with('user')->where(['job_title' => 'coach', 'sport_id' => $sport->id])->get();
+        $coaches = Employee::with('user')
+            ->where('job_title', 'coach')
+            ->where('sport_id', $sport->id)
+            ->whereHas('user', function ($query) use ($sport) {
+                $query->where('academy_id', $sport->academy_id);
+            })
+            ->get();
 
-        return view('sports.show')->with(['sport' => $sport, 'coaches' => $coaches]);
+        return view('sports.show')->with([
+            'sport' => $sport,
+            'coaches' => $coaches,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method POST
+    // @Route /sports/{id}
     public function update(Request $request, Sport $sport)
     {
         // Authorize update action for the current user on this sport
@@ -124,9 +128,8 @@ class SportController extends Controller
         return redirect()->route('sports.show', $sport->id)->with('success', 'Sport Updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // @Method DELETE
+    // @Route /sports/{id}
     public function destroy(Sport $sport)
     {
         // Authorize delete action for the current user on this sport

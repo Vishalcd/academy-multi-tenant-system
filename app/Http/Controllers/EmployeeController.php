@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /employees
     public function index(Request $request): View
     {
 
@@ -70,9 +69,8 @@ class EmployeeController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /employees
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -133,9 +131,8 @@ class EmployeeController extends Controller
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // @Method GET
+    // @Route /employees/{id}
     public function show(string $id)
     {
         // Get Employee Detail
@@ -151,9 +148,8 @@ class EmployeeController extends Controller
         return view('employees.show')->with(['employee' => $employee, 'transactions' => $transactions, 'sports' => $sports]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method PUT
+    // @Route /employees/{id}
     public function update(Request $request, string $id)
     {
         $employee = Employee::with('user')->findOrFail($id); // get employee + user
@@ -205,9 +201,8 @@ class EmployeeController extends Controller
         return redirect()->route('employees.show', $employee->id)->with('success', 'Employee updated successfully.');
     }
 
-    /**
-     * Add Salary Transaction.
-     */
+    // @Method POST
+    // @Route /employees/{id}/deposit-salary
     public function depositSalary(Request $request, string $id)
     {
         $validatedData = $request->validate([
@@ -267,9 +262,8 @@ class EmployeeController extends Controller
         return redirect()->route('employees.show', $employee->id)->with('success', 'Salary Settled successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // @Method DELETE
+    // @Route /employees/{id}
     public function destroy(Employee $employee)
     {
         // Delete the resource
@@ -285,9 +279,8 @@ class EmployeeController extends Controller
     }
 
 
-    /**
-     * Show Login Employee Profile 
-     */
+    // @Method GET
+    // @Route /employees/me
     public function showMe()
     {
         // get user from session

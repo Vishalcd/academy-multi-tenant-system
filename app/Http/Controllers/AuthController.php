@@ -11,11 +11,15 @@ use Str;
 
 class AuthController extends Controller
 {
+    // @Method GET
+    // @Route /auth/login
     public function index()
     {
         return view("auth.login");
     }
 
+    // @Method POST
+    // @Route /auth/login
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -50,6 +54,8 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    // @Method POST
+    // @Route /auth/logout
     public function logout(Request $request): RedirectResponse
     {
         // Logout the user
@@ -65,12 +71,15 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'You have been logged out.');
     }
 
-    // Forget Password
+    // @Method GET
+    // @Route /auth/forget-password
     public function showLinkRequestForm()
     {
         return view('auth.forgetPassword');
     }
 
+    // @Method POST
+    // @Route /auth/forget-password
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -84,6 +93,8 @@ class AuthController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
+    // @Method GET
+    // @Route /auth/reset-password/{token}
     public function showResetForm(Request $request, $token)
     {
         return view('auth.resetPassword', [
@@ -92,6 +103,8 @@ class AuthController extends Controller
         ]);
     }
 
+    // @Method POST
+    // @Route /auth/reset-password
     public function reset(Request $request)
     {
         $request->validate([

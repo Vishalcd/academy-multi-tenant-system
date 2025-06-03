@@ -30,7 +30,7 @@ Route::middleware(['auth', 'role:employee', 'set.academy'])->group(function () {
 ### Users Routes ###
 Route::middleware(['auth'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::put('/users/{id}/password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+    Route::put('/users/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
 });
 
 ### App Routes ###
@@ -47,7 +47,6 @@ Route::middleware(['auth', 'role:manager,admin', 'set.academy'])->group(function
         'index', 'store', 'show', 'update', 'destroy'
     ]);
     Route::post("/students/{id}/deposit-fees", [StudentController::class, 'depositFee']);
-    Route::post("/students/login", [StudentController::class, 'login']);
 
     // Employee Routes
     Route::resource("employees", EmployeeController::class)->only([

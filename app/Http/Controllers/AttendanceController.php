@@ -12,9 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /attendances
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -38,15 +37,12 @@ class AttendanceController extends Controller
             $attendances = Attendance::with(['student.user', 'student.sport'])
                 ->where('recorded_by', $user->id)
                 ->whereDate('date', $filterDate)
-                ->when($filterSportId, fn ($query) =>
-                    $query->whereHas('student', fn ($q) => $q->where('sport_id', $filterSportId))
-                )
                 ->when($search, fn ($query) =>
                     $query->whereHas('student.user', fn ($q) =>
                         $q->where('name', 'like', '%'.$search.'%')
                     )
                 )
-                ->paginate(10);
+                ->paginate(10); // Removed sport filter here
 
             $students = Student::with('user')
                 ->whereHas('user', fn ($q) => $q->where('academy_id', $academy_id))
@@ -55,7 +51,7 @@ class AttendanceController extends Controller
                 ->sortBy(fn ($student) => $student->user->name)
                 ->values();
 
-            $sports = Sport::where('academy_id', $academy_id)->get();
+            $sports = Sport::where('academy_id', $academy_id)->get(); // You can keep this to show sports for context
         }
 
         if ($user->role === 'manager') {
@@ -72,7 +68,7 @@ class AttendanceController extends Controller
                 )
                 ->paginate(10);
 
-            $sports = Sport::where('academy_id', $academy_id)->get();
+            $sports = Sport::where('academy_id', $academy_id)->get(); // Needed for the dropdown
         }
 
         return view('attendances.index', compact(
@@ -84,11 +80,11 @@ class AttendanceController extends Controller
             'filterSportId',
             'search'
         ));
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /attendances
     public function store(Request $request)
     {
         $today = now()->toDateString();
@@ -123,9 +119,8 @@ class AttendanceController extends Controller
         return redirect()->route('attendances.index')->with('success', 'Attendance recorded successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method PUT
+    // @Route /attendances/{id}
     public function update(Request $request, string $id)
     {
         $validatedData = $request->validate([

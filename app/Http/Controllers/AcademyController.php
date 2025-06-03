@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AcademyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /academies
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -24,9 +23,8 @@ class AcademyController extends Controller
         return view('academies.index')->with(['academies' => $academies, 'search' => $search]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /academies
     public function store(Request $request)
     {
         // validate data
@@ -56,9 +54,8 @@ class AcademyController extends Controller
         return redirect()->route('academies.index')->with('success', 'Academy Added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // @Method GET
+    // @Route /academies/{id}
     public function show(Academy $academy)
     {
         // Get all users with role 'manager' for this academy
@@ -69,9 +66,8 @@ class AcademyController extends Controller
         return view('academies.show')->with(['academy' => $academy, 'managers' => $managers]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method PUT
+    // @Route /academies/{id}
     public function update(Request $request, Academy $academy)
     {
         // validate data
@@ -105,9 +101,8 @@ class AcademyController extends Controller
         return redirect()->route('academies.show', $academy->id)->with('success', 'Academy Updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // @Method DELETE
+    // @Route /academies/{id}
     public function destroy(Academy $academy)
     {
         // delete image before deleting resource
@@ -122,9 +117,9 @@ class AcademyController extends Controller
         return redirect()->route('academies.index')->with('success', 'Academy Deleted successfully.');
     }
 
-    /**
-     * Store newly created manager resource in storage.
-     */
+
+    // @Method DELETE
+    // @Route /academies/{id}/managers
     public function storeManager(Request $request, int $id)
     {
         // validate data

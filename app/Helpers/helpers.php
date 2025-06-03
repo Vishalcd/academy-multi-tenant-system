@@ -45,9 +45,12 @@ if (! function_exists('activeAcademy')) {
 function getAllSports()
 {
     $academyId = session('active_academy_id');
-    return Sport::where('academy_id', $academyId)
+    $sports = Sport::where('academy_id', $academyId)
         ->pluck('sport_title', 'id')
         ->toArray();
+
+    return $sports;
+
 }
 
 // Get All Academies

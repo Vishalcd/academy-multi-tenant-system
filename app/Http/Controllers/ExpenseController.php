@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /expenses
     public function index(Request $request)
     {
         // Get search and sort inputs
@@ -66,9 +65,8 @@ class ExpenseController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /expenses
     public function store(Request $request)
     {
         // validate data
@@ -119,9 +117,8 @@ class ExpenseController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // @Method GET
+    // @Route /expenses/{id}
     public function show(Expense $expense)
     {
         // Authorize view action for the current user on this expense
@@ -131,9 +128,8 @@ class ExpenseController extends Controller
         return view("expenses.show")->with('expense', $expense);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method PUT
+    // @Route /expenses/{id}
     public function update(Request $request, Expense $expense)
     {
         // Authorize update action for the current user on this expense
@@ -177,9 +173,8 @@ class ExpenseController extends Controller
         return redirect()->route('expenses.show', $expense->id)->with('success', 'Expense Updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // @Method DELETE
+    // @Route /expenses/{id}
     public function destroy(Expense $expense)
     {
         // Authorize delete action for the current user on this expense
@@ -195,9 +190,8 @@ class ExpenseController extends Controller
         return redirect()->route('expenses.index')->with('success', 'Expense Deleted successfully.');
     }
 
-    /**
-     * Download recipt from storage.
-     */
+    // @Method GET
+    // @Route /expenses/{id}/download-recipt
     public function downloadRecipt(string $id)
     {
 

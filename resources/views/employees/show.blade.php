@@ -165,11 +165,13 @@
                 <div class="flex items-center gap-6">
                     <x-heading>Employee Fee</x-heading>
                 </div>
+                @if (Auth::user()->role !== 'admin')
                 <a href="#deposit-salary">
                     <x-button-primary>
                         <i class="ti ti-square-rounded-plus"></i> Deposit Salary
                     </x-button-primary>
                 </a>
+                @endif
             </div>
 
             <div class="overflow-auto w-full">

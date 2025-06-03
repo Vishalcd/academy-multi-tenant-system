@@ -111,7 +111,7 @@
         <div class="grid overflow-auto whitespace-nowrap">
             <!-- Table Heading -->
             <x-table-heading grid='expense-grid'>
-                <p>S.no</p>
+                <p>#ID</p>
                 <p>Expense Details</p>
                 <p>Unit Price</p>
                 <p>Quantity</p>

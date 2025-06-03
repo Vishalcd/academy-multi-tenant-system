@@ -20,9 +20,8 @@ use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // @Method GET
+    // @Route /students
     public function index(Request $request): View
     {
         // Get filters from request
@@ -70,9 +69,8 @@ class StudentController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // @Method POST
+    // @Route /students
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -123,9 +121,8 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // @Method GET
+    // @Route /students/{id}
     public function show(string $id)
     {
         // Get Student Detail & Transctions
@@ -141,9 +138,8 @@ class StudentController extends Controller
         return view('students.show')->with(['student' => $student, 'transactions' => $transactions, 'sports' => $sports]);
     }
 
-    /**
-     * Display Student Attendance.
-     */
+    // @Method GET
+    // @Route /students/attendance
     public function studentAttendance(Request $request)
     {
         $user = Auth::user();
@@ -169,9 +165,8 @@ class StudentController extends Controller
         return view('attendances.me', compact('attendances', 'month', 'year'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // @Method PUT
+    // @Route /students/{id}
     public function update(Request $request, $id)
     {
         $student = Student::with('user')->findOrFail($id); // get student + user
@@ -210,9 +205,8 @@ class StudentController extends Controller
         return redirect()->route('students.show', $student->id)->with('success', 'Student updated successfully.');
     }
 
-    /**
-     * Add Fee Transaction.
-     */
+    // @Method POST
+    // @Route /students/{id}/deposit-fees
     public function depositFee(Request $request, string $id)
     {
         $validatedData = $request->validate([
@@ -283,9 +277,8 @@ class StudentController extends Controller
         return redirect()->route('students.show', $student->id)->with('success', 'Fees Deposit successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // @Method DELETE
+    // @Route /students/{id}
     public function destroy(Student $student)
     {
         // Delete the resource
@@ -300,9 +293,8 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'Student Deleted successfully.');
     }
 
-    /**
-     * Show Login Student Profile 
-     */
+    // @Method GET
+    // @Route /students/me
     public function showMe()
     {
         // get user from session

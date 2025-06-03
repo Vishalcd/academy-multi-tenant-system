@@ -72,7 +72,7 @@
                     {{-- Filter By Job Title & Salry Status --}}
                     @if (Auth::user()->role ==='manager')
                     <x-filter-row lable="Filter by Sport">
-                        <x-select name="sport_id" id="sport_id" :options="['' => 'All Sports', ...$sports]" />
+                        <x-select name="sport_id" id="sport_id" :options="['' => 'All Sports'] + $sports" />
                     </x-filter-row>
                     @endif
 

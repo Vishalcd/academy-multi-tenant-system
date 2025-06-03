@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
+    // @Method GET
+    // @Route /settings
     public function index()
     {
         return view('settings.index');
     }
 
-    // @desc Update
-    // @route PUT /settings
+    // @Method POST
+    // @Route /settings
     public function update(Request $request)
     {
         // Get Logged in user

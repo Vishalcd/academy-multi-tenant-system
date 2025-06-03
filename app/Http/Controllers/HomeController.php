@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
+
+    // @Method GET
+    // @Route /
     public function index(Request $request)
     {
 

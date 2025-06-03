@@ -72,7 +72,7 @@
 
                     @if (Auth::user()->role === 'manager')
                     <x-filter-row lable="Filter by Sport">
-                        <x-select name="sport_id" id="sport_id" :options="getAllSports()" />
+                        <x-select name="sport_id" id="sport_id" :options="['' => 'All Sports'] + getAllSports()" />
                     </x-filter-row>
                     @endif
                 </x-button-filter>

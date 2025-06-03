@@ -62,7 +62,7 @@
                 @endif
 
                 <div class="flex items-center gap-3">
-                    @if (Auth::user()->role === 'admin')
+                    @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
                     <button
                         class=" {{Route::is('settings.*') ? 'bg-blue-200 text-blue-500 border-blue-300' : 'text-slate-600 border-slate-200'}} rounded-md border ">
                         <a class="w-10 h-10 flex items-center justify-center" href="{{route('settings.index')}}">
