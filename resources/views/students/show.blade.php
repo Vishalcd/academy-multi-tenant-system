@@ -2,7 +2,7 @@
     <x-slot name="title">Student {{$student->user->name}}</x-slot>
     {{-- edit student form --}}
     <template id="edit-student">
-        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             @csrf
             @method('PUT')
             <div class="col-start-1 -col-end-1 mb-3">
@@ -19,6 +19,13 @@
                     placeholder="xxxxx-xxxxx" icon="phone" />
                 <x-input-box lable="Student Address" :value="old('address', $student->user->address)" name="address"
                     id="address" placeholder="672 Dickens Plaza Lamonttown" icon="map-pin" />
+
+                <div class="flex items-center gap-2">
+                    <label class="font-medium text-sm flex items-center gap-1.5 min-w-40 text-slate-600" for="batch">
+                        <span class="text-lg"><i class="ti ti-ball-american-football"></i></span>Select Batch
+                    </label>
+                    <x-select name="batch" id="batch" :options="allBatches()" />
+                </div>
             </div>
 
             <!-- Row Right -->
@@ -38,6 +45,8 @@
                     </label>
                     <x-select name="sport_id" id="sport_id" :options="$sports" />
                 </div>
+
+                <x-input-box lable="Upload Image" type="file" name="photo" id="photo" icon="photo-up" />
             </div>
 
             <!-- Actions -->
@@ -118,7 +127,7 @@
                 <x-user :huge="true" img="{{$student->user->photo}}" alt_text="{{$student->user->name}}"
                     description_text="{{$student->user->email}}">
                     {{$student->user->name}} - <span
-                        class=" font-mono text-blue-500">{{$student->sport->sport_title}}</span>
+                        class=" font-mono text-blue-500">{{$student->sport->sport_title}}-{{ucfirst($student->batch)}}</span>
                 </x-user>
 
                 <div class="grid grid-cols-2 gap-12 sm:gap-8 lg:gap-8 lg:grid-cols-3">
@@ -134,7 +143,7 @@
                         <x-number-container>{{formatCurrency($student->fees_due)}}</x-number-container>
                     </x-detail-box>
 
-                    <x-detail-box icon="chart-pie" title="Status">
+                    <x-detail-box icon="chart-pie" title="Fee Status">
                         <x-pill :settle="$student->fees_settle">{{$student->fees_settle ? 'Settled' : 'Not-Settled'}}
                         </x-pill>
                     </x-detail-box>

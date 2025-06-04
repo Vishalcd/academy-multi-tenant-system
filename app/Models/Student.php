@@ -14,6 +14,7 @@ class Student extends Model
         'fees_due',
         'fees_settle',
         'total_fees',
+        'batch',
         'created_at',
         'sport_id'
     ];

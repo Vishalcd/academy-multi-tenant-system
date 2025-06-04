@@ -4,7 +4,7 @@
     @if (Auth::user()->role !== "admin")
     {{-- add student form --}}
     <template id="add-student">
-        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             @csrf
             <div class="col-start-1 -col-end-1 mb-3">
                 <x-heading>Add New Student</x-heading>
@@ -17,6 +17,12 @@
                 <x-input-box lable="Phone Number" name="phone" id="phone" placeholder="xxxxx-xxxxx" icon="phone" />
                 <x-input-box lable="Student Address" name="address" id="address"
                     placeholder="672 Dickens Plaza Lamonttown" icon="map-pin" />
+                <div class="flex items-center gap-2">
+                    <label class="font-medium text-sm flex items-center gap-1.5 min-w-40 text-slate-600" for="batch">
+                        <span class="text-lg"><i class="ti ti-ball-american-football"></i></span>Select Batch
+                    </label>
+                    <x-select name="batch" id="batch" :options="allBatches()" />
+                </div>
             </div>
 
             <!-- Row Right -->
@@ -36,6 +42,8 @@
                     </label>
                     <x-select name="sport_id" id="sport_id" :options="$sports" />
                 </div>
+
+                <x-input-box lable="Upload Image" type="file" name="photo" id="photo" icon="photo-up" />
             </div>
 
             <!-- Actions -->
@@ -57,15 +65,12 @@
                 </x-bread-crumb>
                 <x-heading>{{ request('search') ? 'Search Result for: ' . request('search') : 'All Students' }}
                 </x-heading>
+
             </div>
 
             <div class="flex items-center gap-4 flex-wrap justify-center">
-                @if (Auth::user()->role !== "admin")
-                <a href="#add-student">
-                    <x-button-primary icon="square-rounded-plus">Add Student
-                    </x-button-primary>
-                </a>
-                @endif
+                <x-search-box :url="route('students.index')" placeholder="Search by Name.." />
+
                 <x-button-filter url="students.index">
                     {{-- Filter By Sports --}}
                     @if (Auth::user()->role === 'manager')
@@ -87,9 +92,15 @@
                             :options="['' => 'All Students', 'true' => 'Fee Settled', 'false' => 'Fee Due']" />
                     </x-filter-row>
                 </x-button-filter>
-                <x-search-box :url="route('students.index')" placeholder="Search by Name.." />
 
+                @if (Auth::user()->role !== "admin")
+                <a href="#add-student">
+                    <x-button-primary icon="square-rounded-plus">Add Student
+                    </x-button-primary>
+                </a>
+                @endif
 
+                <x-export-btn url="{{route('students.export')}}" />
             </div>
         </div>
 

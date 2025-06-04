@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name="title">Login</x-slot>
+    <x-slot name="title">Reset Password</x-slot>
 
     <!-- Main -->
     <div class="flex min-h-full flex-col justify-center px-6 py-12 h-dvh  items-center bg-white rounded-lg lg:px-8">

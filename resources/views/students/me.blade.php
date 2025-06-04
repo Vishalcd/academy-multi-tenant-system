@@ -64,9 +64,10 @@
     <main>
         <div
             class="flex bg-white py-8 px-8 flex-col items-center justify-between rounded-xl border border-slate-200 mb-6 md:mb-12">
-            <div class="w-full flex items-center justify-between pb-6 mb-6 border-b border-slate-200">
+            <div
+                class="w-full flex flex-col md:flex-row items-center gap-3 justify-between pb-6 mb-6 border-b border-slate-200">
                 <x-heading>Welcome, {{explode(' ',$student->user->name)[0]}}</x-heading>
-                <div class="flex items-center justify-end w-full gap-2">
+                <div class="flex   items-center justify-center md:justify-end w-full gap-2">
                     <x-button-small url="#update-me"><i class="ti ti-edit"></i> <span
                             class="leading-2 text-sm">Update</span>
                     </x-button-small>
@@ -82,7 +83,7 @@
                 <x-user :huge="true" img="{{$student->user->photo}}" alt_text="{{$student->user->name}}"
                     description_text="{{$student->user->email}}">
                     {{$student->user->name}} - <span
-                        class=" font-mono text-blue-500">{{$student->sport->sport_title}}</span>
+                        class=" font-mono text-blue-500">{{$student->sport->sport_title}}-{{ucfirst($student->batch)}}</span>
                 </x-user>
 
                 <div class="grid grid-cols-2 gap-12 sm:gap-8 lg:gap-8 lg:grid-cols-3">
@@ -98,7 +99,7 @@
                         <x-number-container>{{formatCurrency($student->fees_due)}}</x-number-container>
                     </x-detail-box>
 
-                    <x-detail-box icon="chart-pie" title="Status">
+                    <x-detail-box icon="chart-pie" title="Fee Status">
                         <x-pill :settle="$student->fees_settle">{{$student->fees_settle ? 'Settled' : 'Not-Settled'}}
                         </x-pill>
                     </x-detail-box>

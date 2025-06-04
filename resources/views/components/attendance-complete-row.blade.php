@@ -5,7 +5,8 @@
     <x-user img="{{$attendance->student->user->photo}}" alt_text="{{$attendance->student->user->name}}"
         description_text="{{$attendance->student->user->email}}">
         {{$attendance->student->user->name}} - <span
-            class=" font-mono text-slate-600">{{$attendance->student->sport->sport_title}}</span>
+            class=" font-mono text-slate-600">{{$attendance->student->sport->sport_title}}
+            ({{ucfirst($attendance->student->batch)}})</span>
     </x-user>
     <x-make-call>{{$attendance->student->user->phone}}</x-make-call>
     <x-attendance-status :status="$attendance->status">{{ucfirst($attendance->status)}}</x-attendance-status>

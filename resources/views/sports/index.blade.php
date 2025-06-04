@@ -42,12 +42,9 @@
             </div>
 
             <div class="flex items-center gap-4 flex-wrap justify-center">
-                @if (Auth::user()->role !== "admin")
-                <a href="#add-sport">
-                    <x-button-primary icon="square-rounded-plus">Add Sport
-                    </x-button-primary>
-                </a>
-                @endif
+
+                <x-search-box :url="route('sports.index')" placeholder="Search by Name.." />
+
                 <x-button-filter url="sports.index">
                     @if (Auth::user()->role === 'admin')
                     {{-- Filter By Academies --}}
@@ -62,8 +59,14 @@
                             :options="['' => 'All Sports','low_to_high' => 'Expense Low to High','high_to_low' => 'Expense High to Low']" />
                     </x-filter-row>
                 </x-button-filter>
-                <x-search-box :url="route('sports.index')" placeholder="Search by Name.." />
 
+                @if (Auth::user()->role !== "admin")
+                <a href="#add-sport">
+                    <x-button-primary icon="square-rounded-plus">Add Sport
+                    </x-button-primary>
+                </a>
+                @endif
+                <x-export-btn url="{{route('sports.export')}}" />
 
             </div>
         </div>

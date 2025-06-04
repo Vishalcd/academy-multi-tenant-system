@@ -82,12 +82,8 @@
             </div>
 
             <div class="flex items-center gap-4 flex-wrap justify-center">
-                @if (Auth::user()->role !== "admin")
-                <a href="#add-expense">
-                    <x-button-primary icon="square-rounded-plus">Add Expense
-                    </x-button-primary>
-                </a>
-                @endif
+                <x-search-box :url="route('expenses.index')" placeholder="Search by Name.." />
+
                 <x-button-filter url="expenses.index">
                     @if (Auth::user()->role === 'admin')
                     {{-- Filter By Academies --}}
@@ -103,7 +99,16 @@
                     </x-filter-row>
 
                 </x-button-filter>
-                <x-search-box :url="route('expenses.index')" placeholder="Search by Name.." />
+
+                @if (Auth::user()->role !== "admin")
+                <a href="#add-expense">
+                    <x-button-primary icon="square-rounded-plus">Add Expense
+                    </x-button-primary>
+                </a>
+                @endif
+
+                <x-export-btn url="{{route('expenses.export')}}" />
+
             </div>
         </div>
 

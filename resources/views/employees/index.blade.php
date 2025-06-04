@@ -57,17 +57,13 @@
                 <x-bread-crumb>
                     <a href="{{url("/employees")}}">Employees</a>
                 </x-bread-crumb>
-                <x-heading>{{ request('search') ? 'Search Result for: ' . request('search') : 'Employees Salary' }}
+                <x-heading>{{ request('search') ? 'Search Result for: ' . request('search') : 'Employees' }}
                 </x-heading>
             </div>
 
             <div class="flex items-center gap-4 flex-wrap justify-center">
-                @if (Auth::user()->role !== "admin")
-                <a href="#add-employee">
-                    <x-button-primary icon="square-rounded-plus">Add Employee
-                    </x-button-primary>
-                </a>
-                @endif
+                <x-search-box :url="route('employees.index')" placeholder="Search by Name.." />
+
                 <x-button-filter url="employees.index">
                     {{-- Filter By Job Title & Salry Status --}}
                     @if (Auth::user()->role ==='manager')
@@ -89,7 +85,15 @@
                     </x-filter-row>
 
                 </x-button-filter>
-                <x-search-box :url="route('employees.index')" placeholder="Search by Name.." />
+
+                @if (Auth::user()->role !== "admin")
+                <a href="#add-employee">
+                    <x-button-primary icon="square-rounded-plus">Add Employee
+                    </x-button-primary>
+                </a>
+                @endif
+
+                <x-export-btn url="{{route('employees.export')}}" />
             </div>
         </div>
 

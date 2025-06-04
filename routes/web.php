@@ -1,18 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Exports\EmployeesExport;
+use App\Exports\ExpensesExport;
+use App\Exports\SportsExport;
+use App\Exports\StudentsExport;
+
 use App\Http\Controllers\AcademyController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+
+use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 ### Student Profile ###
 Route::middleware(['auth', 'role:student', 'set.academy'])->group(function () {
@@ -43,24 +48,37 @@ Route::middleware(['auth', 'role:manager,admin', 'set.academy'])->group(function
     Route::put("/settings", [SettingController::class, "update"])->name('settings.update');
 
     // Student Routes
+    Route::get('students/export', function () {
+        return Excel::download(new StudentsExport, 'students.xlsx');
+    })->name('students.export');
     Route::resource("students", StudentController::class)->only([
         'index', 'store', 'show', 'update', 'destroy'
     ]);
     Route::post("/students/{id}/deposit-fees", [StudentController::class, 'depositFee']);
 
+
     // Employee Routes
+    Route::get('/employees/export', function () {
+        return Excel::download(new EmployeesExport, 'employees.xlsx');
+    })->name('employees.export');
     Route::resource("employees", EmployeeController::class)->only([
         'index', 'store', 'show', 'update', 'destroy'
     ]);
     Route::post("/employees/{id}/deposit-salary", [EmployeeController::class, 'depositSalary']);
 
     // Expense Routes
+    Route::get('expenses/export', function () {
+        return Excel::download(new ExpensesExport, 'expenses.xlsx');
+    })->name('expenses.export');
     Route::resource("expenses", ExpenseController::class)->only([
         'index', 'store', 'show', 'update', 'destroy'
     ]);
     Route::get('/download-recipt/{id}', [ExpenseController::class, 'downloadRecipt'])->name('expenses.download');
 
     // Sports Routes
+    Route::get('sports/export', function () {
+        return Excel::download(new SportsExport, 'sports.xlsx');
+    })->name('sports.export');
     Route::resource("sports", SportController::class)->only([
         'index', 'store', 'show', 'update', 'destroy'
     ]);

@@ -24,6 +24,7 @@ class studentFactory extends Factory
             'total_fees' => fake()->randomElement([30000, 50000]),
             'fees_due' => fake()->randomElement([0, 20000, 5000, 30000]),
             'fees_settle' => fake()->boolean(),
+            'batch' => fake()->randomElement(['a', 'b', 'c']),
         ];
     }
 }

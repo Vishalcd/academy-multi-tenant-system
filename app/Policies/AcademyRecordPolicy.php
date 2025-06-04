@@ -42,8 +42,8 @@ class AcademyRecordPolicy
 
         // Manager can access only their own academy's data
         if ($user->role === 'manager') {
-            // Record has user relationship (e.g., Student, Employee)
 
+            // Record has user relationship (e.g., Student, Employee)
             if (method_exists($record, 'user') && optional($record->user)->academy_id === $user->academy_id) {
                 return true;
             }

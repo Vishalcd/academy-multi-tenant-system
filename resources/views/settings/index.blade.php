@@ -6,7 +6,7 @@
             <div class="w-full flex items-center justify-between mb-8">
                 <div class="flex items-start md:items-center flex-col md:flex-row gap-2 md:gap-4">
                     <!-- Button Back -->
-                    <x-button-back url="/" />
+                    <x-button-back />
 
                     <!-- Breadcrump -->
                     <x-bread-crumb>

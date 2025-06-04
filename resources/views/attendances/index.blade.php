@@ -1,18 +1,23 @@
 <x-layout>
     <x-slot name="title">Attendance</x-slot>
 
-    @if (!$alreadyTaken && Auth::user()->role === 'employee')
+
+
+    @if (Auth::user()->role === 'employee')
+    @foreach($studentsByBatch as $batch => $students)
+
     {{-- take attendance form --}}
-    <template id="take-attendance">
+    <template id="take-attendance-{{ $batch }}">
         <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-x-8 gap-y-4">
             <div class="col-start-1 -col-end-1 mb-3">
-                <x-heading>Take Attendance of {{date('d, M, Y')}}</x-heading>
+                <x-heading>Take Attendance of (Batch - {{ucfirst($batch)}})</x-heading>
             </div>
 
             <!-- Rows -->
             <div
                 class=" grid grid-cols-1 grid-rows-[min-h] md:grid-cols-2 gap-4 max-h-[80dvh] md:max-h-[60dvh] overflow-y-scroll scroll-smooth scroll">
                 @csrf
+                <input type="hidden" name="batch" value="{{ $batch }}">
                 <!-- Table Rows Start -->
                 @forelse ($students as $student)
                 <x-attendance-row :student="$student" />
@@ -29,7 +34,28 @@
             </div>
         </form>
     </template>
+
+    @endforeach
     @endif
+
+    <template id="attendance-option">
+        <div class=" grid grid-cols-1 space-y-6 px-4">
+            <a href="#take-attendance-a">
+                <x-button-primary icon="calendar-check">Take Attendance (Batch A)
+                </x-button-primary>
+            </a>
+            <a href="#take-attendance-b">
+                <x-button-primary icon="calendar-check">Take Attendance (Batch B)
+                </x-button-primary>
+            </a>
+            <a href="#take-attendance-c">
+                <x-button-primary icon="calendar-check">Take Attendance (Batch C)
+                </x-button-primary>
+            </a>
+        </div>
+    </template>
+
+
 
     <main class="bg-white rounded-xl border border-slate-200 ">
         <!-- Page Details & Filters -->
@@ -43,8 +69,8 @@
 
             <div class="flex items-center gap-4 flex-wrap justify-center">
 
-                @if (!$alreadyTaken && Auth::user()->role === 'employee')
-                <a href="#take-attendance">
+                @if (Auth::user()->role === 'employee')
+                <a href="#attendance-option">
                     <x-button-primary icon="square-rounded-plus">Take Attendance
                     </x-button-primary>
                 </a>
@@ -56,25 +82,21 @@
 
                 <x-button-filter url="attendances.index">
                     {{-- Filter By Job Title & Salry Status --}}
-                    @if (Auth::user()->role ==='manager')
                     <x-filter-row lable="Filter by Date">
                         <x-input-box type="date" name="date" id="date"
                             value="{{ request('date', now()->toDateString()) }}" placeholder="Select Date" />
                     </x-filter-row>
-                    @endif
-
-                    @if (Auth::user()->role ==='employee')
-                    <x-filter-row lable="Filter by Date">
-                        <x-input-box type="date" name="date" id="date"
-                            value="{{ request('date', now()->toDateString()) }}" placeholder="Select Date" />
-                    </x-filter-row>
-                    @endif
 
                     @if (Auth::user()->role === 'manager')
                     <x-filter-row lable="Filter by Sport">
                         <x-select name="sport_id" id="sport_id" :options="['' => 'All Sports'] + getAllSports()" />
                     </x-filter-row>
                     @endif
+
+                    <x-filter-row lable="Filter by Batch">
+                        <x-select name="batch" id="batch"
+                            :options="['' => 'All Batches', 'a' => 'Batch-A','b' => 'Batch-B','c' => 'Batch-C']" />
+                    </x-filter-row>
                 </x-button-filter>
 
 

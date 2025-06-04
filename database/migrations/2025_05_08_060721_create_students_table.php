@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('total_fees')->default(0);
             $table->integer('fees_due')->default(0);
             $table->boolean('fees_settle')->default(false);
+            $table->enum('batch', ['a', 'b', 'c'])->default('a');
             $table->timestamps();
 
             // Add user foreign key constraint

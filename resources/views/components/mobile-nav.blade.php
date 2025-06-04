@@ -52,8 +52,9 @@
                 Profile
             </x-mobile-nav-link>
 
-            <x-mobile-nav-link icon="user-check" isLink="{{Route::is('attendances.*')}}"
-                url="{{route('attendances.index')}}">
+            <x-mobile-nav-link icon="user-check"
+                isLink="{{Route::is('students.showAttaendance') || Route::is('attendances.*')}}"
+                url="{{Auth::user()->role === 'employee' ? route('attendances.index') : route('students.showAttaendance')}}">
                 Attendance
             </x-mobile-nav-link>
             @endif

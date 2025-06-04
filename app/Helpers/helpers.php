@@ -58,3 +58,9 @@ function getAllAcademies()
 {
     return Academy::pluck('name', 'id')->toArray();
 }
+
+// All Batches
+function allBatches()
+{
+    return ['a' => 'Batch-A', 'b' => 'Batch-B', 'c' => 'Batch-C'];
+}

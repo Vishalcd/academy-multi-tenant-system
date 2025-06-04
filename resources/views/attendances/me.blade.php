@@ -31,7 +31,7 @@
 
                     </x-filter-row>
 
-                    <x-filter-row lable="Filter by Date">
+                    <x-filter-row lable="Filter by Year">
                         <x-select name="year" id="year" :options="generateYearArray(2)"
                             :selected="request('year', now()->year)" />
                     </x-filter-row>

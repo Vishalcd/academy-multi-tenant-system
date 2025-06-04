@@ -4,7 +4,8 @@
     <x-number-container>#{{$student->id}}</x-number-container>
     <x-user img="{{$student->user->photo}}" alt_text="{{$student->user->name}}"
         description_text="{{$student->user->email}}">
-        {{$student->user->name}} - <span class=" font-mono text-slate-600">{{$student->sport->sport_title}}</span>
+        {{$student->user->name}} &horbar; <span class=" font-mono text-slate-600">({{$student->sport->sport_title}}
+            {{ucfirst($student->batch)}}) </span>
     </x-user>
     <x-make-call>{{$student->user->phone}}</x-make-call>
     <x-pill :settle="$student->fees_settle">{{$student->fees_settle ? 'Settled' : 'Not-Settled'}}</x-pill>

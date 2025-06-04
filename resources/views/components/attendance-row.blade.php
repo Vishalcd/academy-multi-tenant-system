@@ -5,7 +5,7 @@
     {{-- Student Info --}}
     <x-user img="{{ $student->user->photo }}" alt_text="{{ $student->user->name }}"
         description_text="{{ $student->user->phone }}">
-        {{ $student->user->name }}
+        {{ $student->user->name }} &horbar; ({{ ucfirst($student->batch) }})
     </x-user>
 
     {{-- Attendance Toggle --}}

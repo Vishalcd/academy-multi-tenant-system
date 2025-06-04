@@ -6,7 +6,6 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Sport;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,11 +18,15 @@ class AttendanceController extends Controller
         $user = Auth::user();
         $academy_id = $user->academy_id;
         $filterDate = $request->input('date', now()->toDateString());
+        $today = now()->toDateString();
         $filterSportId = $request->input('sport_id');
         $search = $request->input('search');
+        $filterBatch = $request->input('batch');
+
 
         $attendances = collect();
         $students = collect();
+        $studentsByBatch = collect();
         $alreadyTaken = false;
 
         if ($user->role === 'employee') {
@@ -42,7 +45,12 @@ class AttendanceController extends Controller
                         $q->where('name', 'like', '%'.$search.'%')
                     )
                 )
-                ->paginate(10); // Removed sport filter here
+                ->when($filterBatch, fn ($query) =>
+                    $query->whereHas('student', fn ($q) =>
+                        $q->where('batch', $filterBatch)
+                    )
+                )
+                ->paginate(20);
 
             $students = Student::with('user')
                 ->whereHas('user', fn ($q) => $q->where('academy_id', $academy_id))
@@ -50,6 +58,19 @@ class AttendanceController extends Controller
                 ->get()
                 ->sortBy(fn ($student) => $student->user->name)
                 ->values();
+
+            // Group attendances by student.batch
+            $studentsByBatch = $students->groupBy('batch')->filter(function ($batchStudents, $batch) use ($user, $today) {
+                $studentIds = $batchStudents->pluck('id');
+
+                $alreadyTaken = Attendance::whereDate('date', $today)
+                    ->whereIn('student_id', $studentIds)
+                    ->where('recorded_by', $user->id)
+                    ->exists();
+
+                return ! $alreadyTaken; // keep batch only if not already taken
+            });
+
 
             $sports = Sport::where('academy_id', $academy_id)->get(); // You can keep this to show sports for context
         }
@@ -61,18 +82,22 @@ class AttendanceController extends Controller
                 ->when($filterSportId, fn ($query) =>
                     $query->whereHas('student', fn ($q) => $q->where('sport_id', $filterSportId))
                 )
+                ->when($filterBatch, fn ($query) =>
+                    $query->whereHas('student', fn ($q) => $q->where('batch', $filterBatch))
+                )
                 ->when($search, fn ($query) =>
                     $query->whereHas('student.user', fn ($q) =>
                         $q->where('name', 'like', '%'.$search.'%')
                     )
                 )
-                ->paginate(10);
+                ->paginate(20);
 
             $sports = Sport::where('academy_id', $academy_id)->get(); // Needed for the dropdown
         }
 
         return view('attendances.index', compact(
             'attendances',
+            'studentsByBatch',
             'students',
             'alreadyTaken',
             'filterDate',
@@ -91,33 +116,51 @@ class AttendanceController extends Controller
         $user = Auth::user();
         $sport_id = Employee::where('user_id', $user->id)->value('sport_id');
 
-        // Check if today's attendance already exists
-        $alreadyTaken = Attendance::whereDate('date', $today)
-            ->whereIn('student_id', Student::where('sport_id', $sport_id)->pluck('id'))
-            ->where('recorded_by', $user->id)
-            ->exists();
-
-        if ($alreadyTaken) {
-            return redirect()->route('attendances.index')->with('error', 'Today\'s attendance has already been recorded.');
-        }
-
         $validatedData = $request->validate([
+            'batch' => 'required|string',
             'attendances' => 'required|array',
             'attendances.*.student_id' => 'required|exists:students,id',
             'attendances.*.status' => 'required|in:present,absent',
         ]);
 
-        $validatedData['date'] = $today;
+        $batch = $validatedData['batch'];
+        $attendanceEntries = $validatedData['attendances'];
 
-        foreach ($validatedData['attendances'] as $data) {
+        // Get all student IDs in this batch and sport
+        $studentIds = Student::where('batch', $batch)
+            ->where('sport_id', $sport_id)
+            ->pluck('id');
+
+        // Check if any student in this batch already has attendance today
+        $alreadyTaken = Attendance::whereDate('date', $today)
+            ->whereIn('student_id', $studentIds)
+            ->where('recorded_by', $user->id)
+            ->exists();
+
+        if ($alreadyTaken) {
+            return redirect()->route('attendances.index')
+                ->with('error', "Attendance for Batch {$batch} has already been recorded.");
+        }
+
+        // Save attendance for each student
+        foreach ($attendanceEntries as $entry) {
+            $studentId = $entry['student_id'];
+            $status = $entry['status'];
+
+            if (! $studentIds->contains($studentId)) {
+                continue; // Skip student if not in this batch and sport
+            }
+
             Attendance::updateOrCreate(
-                ['student_id' => $data['student_id'], 'date' => $validatedData['date']],
-                ['status' => $data['status'], 'recorded_by' => Auth::id()]
+                ['student_id' => $studentId, 'date' => $today],
+                ['status' => $status, 'recorded_by' => $user->id]
             );
         }
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance recorded successfully.');
+        return redirect()->route('attendances.index')->with('success', "Attendance recorded for Batch {$batch}.");
     }
+
+
 
     // @Method PUT
     // @Route /attendances/{id}

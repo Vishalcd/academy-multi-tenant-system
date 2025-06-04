@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Mail\FeeSubmitted;
 use App\Mail\Welcome;
 use App\Models\Attendance;
-use App\Models\Sport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -57,7 +56,7 @@ class StudentController extends Controller
             })
             ->when($sportFilter, function ($query) use ($sportFilter) {
                 $query->where('sport_id', $sportFilter);
-            })
+            })->orderBy('created_at', 'asc') // 👈 Shows newly added students first
             ->paginate(20)
             ->appends(request()->query()); // Preserve filters in pagination links
 
@@ -81,7 +80,22 @@ class StudentController extends Controller
             'total_fees' => 'required|integer',
             'created_at' => 'required',
             'sport_id' => 'required|integer',
+            'batch' => 'required|string',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif,webp:max:10240',
         ]);
+
+        dd($validatedData);
+
+        // check for image
+        if ($request->hasFile('photo')) {
+            // store the file and get
+            $path = $request->file("photo")->store('users', 'public');
+
+            // Add path to validated data
+            $validatedData['photo'] = $path;
+
+        }
+
 
         $academyId = activeAcademy()?->id;
 
@@ -95,6 +109,7 @@ class StudentController extends Controller
             'phone' => $validatedData['phone'],
             'address' => $validatedData['address'],
             'password' => $validatedData['password'],
+            'photo' => $validatedData['photo'],
             'academy_id' => $academyId
         ]);
 
@@ -104,7 +119,8 @@ class StudentController extends Controller
             'sport_id' => $validatedData['sport_id'],
             'total_fees' => $validatedData['total_fees'],
             'created_at' => $validatedData['created_at'],
-            'fees_due' => $validatedData['total_fees']
+            'fees_due' => $validatedData['total_fees'],
+            'batch' => $validatedData['batch']
         ]);
 
         $data = [
@@ -182,7 +198,24 @@ class StudentController extends Controller
             'total_fees' => 'required|integer',
             'address' => 'required|string|max:255',
             'created_at' => 'required|date',
+            'batch' => 'required|date',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif,webp:max:10240',
         ]);
+
+
+
+        // check for image
+        if ($request->hasFile('photo')) {
+            // store the file and get
+            $path = $request->file("photo")->store('users', 'public');
+
+            // Add path to validated data
+            // Update user with photo
+            $validatedData['photo'] = $path;
+            $student->user->update([
+                'photo' => $validatedData['photo'],
+            ]);
+        }
 
         $academyId = activeAcademy()?->id;
 
@@ -200,6 +233,8 @@ class StudentController extends Controller
             'sport_id' => $validatedData['sport_id'],
             'total_fees' => $validatedData['total_fees'],
             'created_at' => $validatedData['created_at'],
+            'batch' => $validatedData['batch']
+
         ]);
 
         return redirect()->route('students.show', $student->id)->with('success', 'Student updated successfully.');

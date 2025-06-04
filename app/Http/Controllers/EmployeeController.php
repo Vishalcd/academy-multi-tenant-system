@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             })
             ->when($sportId, function ($query) use ($sportId) {
                 $query->where('sport_id', $sportId);
-            })
+            })->orderBy('created_at', 'asc') // 👈 Shows newly added students first
             ->paginate(20)
             ->appends(request()->query()); // Preserve filters in pagination links
 
@@ -86,7 +86,7 @@ class EmployeeController extends Controller
         // check for image
         if ($request->hasFile('photo')) {
             // store the file and get
-            $path = $request->file("photo")->store('employees', 'public');
+            $path = $request->file("photo")->store('users', 'public');
 
             // Add path to validated data
             $validatedData['photo'] = $path;
@@ -172,7 +172,7 @@ class EmployeeController extends Controller
         // check for image
         if ($request->hasFile('photo')) {
             // store the file and get
-            $path = $request->file("photo")->store('employees', 'public');
+            $path = $request->file("photo")->store('users', 'public');
 
             // Add path to validated data
             // Update user with photo

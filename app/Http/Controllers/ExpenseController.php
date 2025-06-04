@@ -54,7 +54,7 @@ class ExpenseController extends Controller
         }
 
         // Get paginated results
-        $expenses = $query->paginate(20)->appends($request->query());
+        $expenses = $query->orderBy('created_at', 'asc')->paginate(20)->appends($request->query());
 
         // Load all academies for admin dropdown
         $academies = getAllAcademies();
