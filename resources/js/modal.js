@@ -1,3 +1,5 @@
+import { loadToogles } from "./togglePassword";
+
 const modal = document.querySelector("#modal");
 const modalContainer = document.querySelector("#modal-container");
 
@@ -33,6 +35,8 @@ const hideModal = () => {
         // insert content
         modalContainer.innerHTML = "";
         modalContainer.appendChild(clone);
+
+        loadToogles();
 
         modal
             .querySelector("#btn-close")

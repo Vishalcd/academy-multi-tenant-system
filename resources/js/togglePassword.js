@@ -1,14 +1,20 @@
-const btns = document.querySelectorAll("#toggle-password");
+export const loadToogles = function () {
+    const btns = document.querySelectorAll("#toggle-password");
+    let isShown = false;
 
-const loadToogles = function () {
     btns?.forEach((btn) => {
         btn.addEventListener("click", (e) => {
-            console.log(e.target);
-            console.log(e.target.closest("input"));
+            isShown = !isShown;
+
+            btn.innerHTML = isShown
+                ? `<i
+                    class="ti ti-eye pointer-events-none"></i>`
+                : `<i
+                    class="ti ti-eye-closed pointer-events-none"></i>`;
+
+            const input = btn.nextElementSibling;
+            input.type = isShown ? "text" : "password";
         });
     });
 };
-
-["hashchange", "load"].forEach((event) => {
-    window.addEventListener(event, loadToogles);
-});
+loadToogles();

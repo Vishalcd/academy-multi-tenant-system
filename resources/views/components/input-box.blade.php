@@ -11,10 +11,10 @@
 
     <div class="w-full">
         <div class="relative">
-            @if ($type === 'pdassword')
+            @if ($type === 'password')
             <button id="toggle-password" type="button"
                 class="absolute top-1/2 right-2 -translate-y-1/2 w-6 rounded-sm aspect-square flex items-center justify-center"><i
-                    class="ti ti-eye"></i></button>
+                    class="ti ti-eye-closed pointer-events-none"></i></button>
             @endif
             <input
                 class="@error($name) !border-red-300    
