@@ -59,13 +59,12 @@ A Laravel-based multi-tenant sports academy management application with role-bas
 - **Database**: PostgreSQL
 - **Auth**: Laravel Breeze / Sanctum
 - **Local Development**: Laravel Herd (Mac/Windows)
-- **Deployment**: VPS (e.g. Hostinger)
 
 ## ⚙️ Installation Guide (Using Laravel Herd)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/academy-management.git
+git clone https://github.com/Vishalcd/academy-multi-tenant-system.git
 cd academy-management
 
 # 2. Install PHP dependencies
