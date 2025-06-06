@@ -11,16 +11,20 @@
 
     <div class="w-full">
         <div class="relative">
-            @if ($type === 'password')
-            <button id="toggle-password" type="button"
-                class="absolute top-1/2 right-2 -translate-y-1/2 w-6 rounded-sm aspect-square flex items-center justify-center"><i
-                    class="ti ti-eye-closed pointer-events-none"></i></button>
-            @endif
-            <input
-                class="@error($name) !border-red-300    
-                    @enderror text-base font-medium placeholder:text-sm border px-2.5 h-10 w-full py-1.5  border-slate-200 rounded-md placeholder:text-slate-400 file:self-center file:bg-blue-200 file:px-2 file:h-full file:rounded-sm file:cursor-pointer file:font-semibold file:text-blue-500 file:mr-2 "
-                type="{{$type}}" id="{{$id}}" name="{{$name}}" min="0" placeholder="{{$placeholder}}"
-                value="{{old($name, $value)}}" {{$disabled}} />
+            <div class="relative">
+
+                @if ($type === 'password')
+                <button id="toggle-password" type="button"
+                    class="absolute top-1/2 right-2 -translate-y-1/2 w-6 rounded-sm aspect-square flex items-center justify-center"><i
+                        class="ti ti-eye-closed pointer-events-none"></i></button>
+                @endif
+
+                <input
+                    class="@error($name) !border-red-300    
+                    @enderror text-base font-medium placeholder:text-sm border px-2.5 h-10 w-full py-1.5  border-slate-200 rounded-md placeholder:text-slate-400 {{$type === 'file' ? 'file:self-center file:bg-blue-200 file:px-2 file:h-full file:rounded-sm file:cursor-pointer file:font-semibold file:text-blue-500 file:mr-2' : ''}}"
+                    type="{{$type}}" id="{{$id}}" name="{{$name}}" min="0" placeholder="{{$placeholder}}"
+                    value="{{old($name, $value)}}" {{$disabled}} />
+            </div>
         </div>
         @error($name)
         <p class="  mt-1 text-sm text-red-500">{{$message}}</p>

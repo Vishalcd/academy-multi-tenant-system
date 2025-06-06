@@ -62,5 +62,5 @@ function getAllAcademies()
 // All Batches
 function allBatches()
 {
-    return ['a' => 'Batch-A', 'b' => 'Batch-B', 'c' => 'Batch-C'];
+    return ['a' => 'Batch-A', 'b' => 'Batch-B', 'c' => 'Batch-C', 'd' => 'Batch-D', 'e' => 'Batch-E'];
 }

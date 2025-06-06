@@ -105,10 +105,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('/auth/reset-password', [AuthController::class, 'reset'])->name('password.update');
 });
-//  Logout Route    
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// // Attendances Routes
+
+### Attendance Routes ###
 Route::middleware(['auth', 'role:manager,student,employee'])->group(function () {
     Route::resource('attendances', AttendanceController::class)->only(['index', 'store', 'update']);
 });
